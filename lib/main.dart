@@ -57,3 +57,5 @@ class MainPage extends StatelessWidget {
     );
   }
 }
+
+// git status && git add --all && git commit -am "step-x" && git push && git tag "step-x" && git push --tags
