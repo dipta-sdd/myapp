@@ -12,6 +12,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
     MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -20,8 +21,8 @@ void main() {
       routes: {
         '/login/': (context) => const LoginView(),
         '/register/': (context) => const RegesterView(),
-        '/email_verification/': (context) => VerifyEmailView(),
-        '/main_ui/': (context) => MainUI(),
+        '/email_verification/': (context) => const VerifyEmailView(),
+        '/main_ui/': (context) => const MainUI(),
       },
     ),
   );

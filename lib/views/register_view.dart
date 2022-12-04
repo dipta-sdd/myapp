@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/utility/show_error_dialog.dart';
 
 class RegesterView extends StatefulWidget {
   const RegesterView({super.key});
@@ -33,23 +36,32 @@ class _RegesterViewState extends State<RegesterView> {
         title: const Text('Register'),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TextField(
-            controller: _email,
-            keyboardType: TextInputType.emailAddress,
-            enableSuggestions: false,
-            autocorrect: false,
-            decoration: const InputDecoration(
-              hintText: 'example@email.com',
+          Container(
+            margin: const EdgeInsets.fromLTRB(10.0, 5, 10, 5),
+            color: const Color.fromRGBO(235, 232, 232, 0.91),
+            child: TextField(
+              controller: _email,
+              keyboardType: TextInputType.emailAddress,
+              enableSuggestions: false,
+              autocorrect: false,
+              decoration: const InputDecoration(
+                hintText: 'example@email.com',
+              ),
             ),
           ),
-          TextField(
-            controller: _password,
-            obscureText: true,
-            enableSuggestions: false,
-            autocorrect: false,
-            decoration: const InputDecoration(
-              hintText: 'password',
+          Container(
+            margin: const EdgeInsets.fromLTRB(10.0, 5, 10, 5),
+            color: const Color.fromRGBO(235, 232, 232, 0.91),
+            child: TextField(
+              controller: _password,
+              obscureText: true,
+              enableSuggestions: false,
+              autocorrect: false,
+              decoration: const InputDecoration(
+                hintText: 'password',
+              ),
             ),
           ),
           TextButton(
@@ -61,16 +73,34 @@ class _RegesterViewState extends State<RegesterView> {
                   email: email,
                   password: password,
                 );
+                log('reg sucess');
+                Navigator.of(context).pushNamed('/email_verification/');
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'invalid-email') {
-                  print('Enter a valid email');
+                  showErrorDialog(context, 'Invalid email');
                 } else if (e.code == 'email-already-in-use') {
-                  print('Email already in use');
+                  showErrorDialog(context, 'Email already in use');
                 } else if (e.code == 'weak-password') {
-                  print('Weak password');
+                  showErrorDialog(context, 'Weak password');
+                } else {
+                  String s = e.code;
+                  for (int i = 0; i < s.length; i++) {
+                    if (s[i] == '-') {
+                      s = replaceCharAt(s, i, ' ');
+                    }
+                  }
+                  await showErrorDialog(context, 'Error: $s');
                 }
                 //print(e.code);
-              } catch (e) {}
+              } catch (e) {
+                String s = e.toString();
+                for (int i = 0; i < s.length; i++) {
+                  if (s[i] == '-') {
+                    s = replaceCharAt(s, i, ' ');
+                  }
+                }
+                await showErrorDialog(context, 'Error: $s');
+              }
             },
             child: const Text('Regester'),
           ),

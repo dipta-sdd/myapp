@@ -5,6 +5,8 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../utility/show_error_dialog.dart';
+
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
 
@@ -36,23 +38,32 @@ class _LoginViewState extends State<LoginView> {
         title: const Text('Login'),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TextField(
-            controller: _email,
-            keyboardType: TextInputType.emailAddress,
-            enableSuggestions: false,
-            autocorrect: false,
-            decoration: const InputDecoration(
-              hintText: 'example@email.com',
+          Container(
+            margin: const EdgeInsets.fromLTRB(10.0, 5, 10, 5),
+            color: const Color.fromRGBO(235, 232, 232, 0.91),
+            child: TextField(
+              controller: _email,
+              keyboardType: TextInputType.emailAddress,
+              enableSuggestions: false,
+              autocorrect: false,
+              decoration: const InputDecoration(
+                hintText: 'example@email.com',
+              ),
             ),
           ),
-          TextField(
-            controller: _password,
-            obscureText: true,
-            enableSuggestions: false,
-            autocorrect: false,
-            decoration: const InputDecoration(
-              hintText: '********',
+          Container(
+            margin: const EdgeInsets.fromLTRB(10.0, 5, 10, 5),
+            color: const Color.fromRGBO(235, 232, 232, 0.91),
+            child: TextField(
+              controller: _password,
+              obscureText: true,
+              enableSuggestions: false,
+              autocorrect: false,
+              decoration: const InputDecoration(
+                hintText: '********',
+              ),
             ),
           ),
           TextButton(
@@ -78,13 +89,29 @@ class _LoginViewState extends State<LoginView> {
                 }
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'wrong-password') {
-                  log('Wrong password');
+                  await showErrorDialog(context, 'Wrong username or password');
                 } else if (e.code == 'invalid-email') {
-                  log('Enter valid email');
+                  await showErrorDialog(context, 'Invalid email');
+                } else if (e.code == 'user-not-found') {
+                  await showErrorDialog(context, 'User not found');
+                } else {
+                  String s = e.code;
+                  for (int i = 0; i < s.length; i++) {
+                    if (s[i] == '-') {
+                      s = replaceCharAt(s, i, ' ');
+                    }
+                  }
+                  await showErrorDialog(context, 'Error: $s');
                 }
                 //print(e.code);
               } catch (e) {
-                log(e.toString());
+                String s = e.toString();
+                for (int i = 0; i < s.length; i++) {
+                  if (s[i] == '-') {
+                    s = replaceCharAt(s, i, ' ');
+                  }
+                }
+                await showErrorDialog(context, 'Error: $s');
               }
             },
             child: const Text('Login'),
