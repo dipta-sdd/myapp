@@ -38,28 +38,34 @@ class _RegesterViewState extends State<RegesterView> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
+          Card(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+            ),
             margin: const EdgeInsets.fromLTRB(10.0, 5, 10, 5),
-            color: const Color.fromRGBO(235, 232, 232, 0.91),
             child: TextField(
               controller: _email,
               keyboardType: TextInputType.emailAddress,
               enableSuggestions: false,
               autocorrect: false,
               decoration: const InputDecoration(
+                border: OutlineInputBorder(),
                 hintText: 'example@email.com',
               ),
             ),
           ),
-          Container(
+          Card(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+            ),
             margin: const EdgeInsets.fromLTRB(10.0, 5, 10, 5),
-            color: const Color.fromRGBO(235, 232, 232, 0.91),
             child: TextField(
               controller: _password,
               obscureText: true,
               enableSuggestions: false,
               autocorrect: false,
               decoration: const InputDecoration(
+                border: OutlineInputBorder(),
                 hintText: 'password',
               ),
             ),

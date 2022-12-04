@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 enum MenuAction { logout }
@@ -25,6 +26,11 @@ class _MainUIState extends State<MainUI> {
                   final shouldLogout = await showLogOutDialog(context);
                   log(shouldLogout.toString());
                   if (shouldLogout) {
+                    // ignore: use_build_context_synchronously
+                    log('logout');
+                    await FirebaseAuth.instance.signOut();
+                    final user = FirebaseAuth.instance.currentUser;
+                    log(user.toString());
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       '/login/',
                       (_) => false,
@@ -34,9 +40,23 @@ class _MainUIState extends State<MainUI> {
               }
             },
             itemBuilder: ((context) {
-              return const [
+              return [
                 PopupMenuItem<MenuAction>(
-                    value: MenuAction.logout, child: Text('Log Out')),
+                  value: MenuAction.logout,
+                  child: Row(
+                    // ignore: prefer_const_literals_to_create_immutables
+                    children: [
+                      const Text('Log Out'),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      const Icon(
+                        Icons.logout_outlined,
+                        color: Colors.black,
+                      ),
+                    ],
+                  ),
+                ),
               ];
             }),
           )
@@ -45,8 +65,8 @@ class _MainUIState extends State<MainUI> {
       body: Center(
         child: Column(
           children: const [
-            Text('Hello shaw'),
-            Text('biri khawa'),
+            Text('Hello user'),
+            Text('hala gaira'),
           ],
         ),
       ),
